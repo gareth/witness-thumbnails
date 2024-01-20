@@ -47,11 +47,11 @@ class Thumbnail:
       (server_text, port_text) = (self.address, "38281")
     slot_text = self.slot
 
-    ink = (30,30,60)
+    ink = (30,30,60) # Dark grey, nearly black, slightly blue
 
     image = Image.new("RGBA", (self.width, self.height), self.background)
     draw = ImageDraw.Draw(image)
-    draw.fontmode = "l"
+    draw.fontmode = "l" # Antialiased
 
     rows = self.layout([server_text, f":{port_text}", slot_text], [25, 45, 25], 5)
     layout_height = rows[-1][-1]
@@ -71,6 +71,8 @@ class Thumbnail:
 
     return image
 
+  # Calculates the positions for successive lines of text at given font sizes so
+  # they line up nicely on top of each other
   def layout(self, texts: list[str], sizes: list[int], spacing: int=0):
     fontboxes = [fontbox(t, s) for (t, s) in zip(texts, sizes)]
     offset = 0
