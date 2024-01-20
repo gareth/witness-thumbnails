@@ -53,7 +53,7 @@ class Thumbnail:
     draw = ImageDraw.Draw(image)
     draw.fontmode = "l" # Antialiased
 
-    rows = self.layout([server_text, f":{port_text}", slot_text], [25, 45, 25], 5)
+    rows = self.layout([server_text, f":{port_text}", slot_text], [25, 80, 25], 5)
     layout_height = rows[-1][-1]
 
     padding_top = (self.height - layout_height) // 2
