@@ -102,7 +102,7 @@ def get_time(savegame):
 def identify_saves(savegame_directory):
     address_slot_to_savegames = defaultdict(lambda: [])
 
-    for save_game in tqdm(glob.glob(os.path.join(savegame_directory, r"*.witness_campaign"))):
+    for save_game in tqdm(glob.glob(os.path.join(savegame_directory, r"*.witness_campaign")), "Parsing save files"):
         address, slot = get_address_and_slot_name(save_game)
 
         if not address:
@@ -115,7 +115,7 @@ def identify_saves(savegame_directory):
         for key, savegames in address_slot_to_savegames.items()
     }
 
-    for address, save_games in address_slot_to_savegames.items():
+    for address, save_games in tqdm(address_slot_to_savegames.items(), "Generating image files"):
         make_thumbnail(address[0], address[1], save_games[0][:-17] + ".png")
         for older_save_game in save_games[1:]:
             make_thumbnail(address[0], address[1], older_save_game[:-17] + ".png", True)
