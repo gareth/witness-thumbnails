@@ -26,7 +26,7 @@ def fontbox(text: str, size: int):
   return (text, font, box)
 
 class Thumbnail:
-  def __init__(self, address: str, slot: str, seed: str=None, rows=24, cols=3, width=320, height=180) -> None:
+  def __init__(self, address: str, slot: str, seed: str=None, rows=24, cols=3, width=320, height=180, old=False) -> None:
     self.address = address
     self.slot = slot
     self.seed = seed
@@ -34,10 +34,14 @@ class Thumbnail:
     self.height = height
     self.rows = rows
     self.cols = cols
+    self.old = old
 
     attributes = Attributes(seed or f"{address}|{slot}", self.rows, self.cols)
 
-    self.background = attributes.background
+    if old:
+      self.background = (110, 110, 110)
+    else:
+      self.background = attributes.background
     self.fingerprint = attributes.fingerprint
 
   def image(self):
@@ -54,6 +58,7 @@ class Thumbnail:
     draw.fontmode = "l" # Antialiased
 
     rows = self.layout([server_text, f":{port_text}", slot_text], [25, 80, 25], 5)
+
     layout_height = rows[-1][-1]
 
     padding_top = (self.height - layout_height) // 2
@@ -61,6 +66,11 @@ class Thumbnail:
 
     for (text, font, (x, y), bottom) in rows:
       draw.text((x + padding_left, y + padding_top), text, fill=ink, font=font)
+
+    if self.old:
+      text, font, bbox = fontbox("(old)", 25)
+      _, _, width, height = bbox
+      draw.text((self.width - width - 5, self.height - height - 5), text, fill=ink, font=font)
 
     for (i, present) in enumerate(self.fingerprint):
       cols = self.cols
@@ -86,11 +96,17 @@ class Thumbnail:
     return outputs
 
 
-if len(sys.argv) > 2:
-  (address, slot) = sys.argv[1:3]
-else:
-  port = random.randrange(10000, 65535)
-  (address, slot) = (f"archipelago.gg:{port}", "Player")
-thumb = Thumbnail(address, slot)
+def make_thumbnail(address, slot, output_path, old=False):
+  thumb = Thumbnail(address, slot, old=old)
 
-thumb.image().save(f"output/{address}-{slot}.png")
+  thumb.image().save(output_path)
+
+
+if __name__ == '__main__':
+  if len(sys.argv) > 2:
+    address, slot = sys.argv[1:3]
+  else:
+    port = random.randrange(10000, 65535)
+    address, slot = (f"archipelago.gg:{port}", "Player")
+
+  make_thumbnail(address, slot, f"output/{address}-{slot}.png")
