@@ -103,7 +103,7 @@ def get_time(savegame):
 def identify_saves(savegame_directory):
     address_slot_to_savegames = defaultdict(lambda: [])
 
-    for save_game in tqdm(glob.glob(savegame_directory + r"*.witness_campaign")):
+    for save_game in tqdm(glob.glob(savegame_directory + r"/*.witness_campaign")):
         address, slot = get_address_and_slot_name(save_game)
 
         if not address:
@@ -124,4 +124,4 @@ def identify_saves(savegame_directory):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    identify_saves("F:/AppData/Roaming/The Witness/")
+    identify_saves(os.path.join(os.getenv('APPDATA'), "The Witness"))
