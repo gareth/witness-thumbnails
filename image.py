@@ -1,4 +1,6 @@
 import sys
+import os.path
+import logging
 
 # Pillow for Image processing.
 from PIL import Image, ImageDraw, ImageFont
@@ -13,6 +15,11 @@ AP_COLORS = [
   (118,126,189), # AP blue
   (238,227,145)  # AP yellow
 ]
+
+if not os.path.isfile("fonts/Karmina Bold.otf"):
+  logging.error("Couldn't find font \"Karmina Bold.otf\"."
+                " Please download this font and put it in the \"fonts\" subdirectory.")
+  exit(-1)
 
 class Attributes:
   def __init__(self, seed, rows, cols) -> None:
