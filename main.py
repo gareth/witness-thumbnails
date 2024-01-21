@@ -4,6 +4,7 @@ import os
 from collections import defaultdict
 from datetime import datetime
 
+from PIL import Image
 from tqdm import tqdm
 
 from image import make_thumbnail
@@ -103,6 +104,13 @@ def identify_saves(savegame_directory):
     address_slot_to_savegames = defaultdict(lambda: [])
 
     for save_game in tqdm(glob.glob(os.path.join(savegame_directory, r"*.witness_campaign")), "Parsing save files"):
+        png_file = save_game[:-17] + ".png"
+
+        if os.path.isfile(png_file):
+            im = Image.open(png_file)
+            if "WitnessThumbnailsTool" in im.info:
+                continue
+
         address, slot = get_address_and_slot_name(save_game)
 
         if not address:

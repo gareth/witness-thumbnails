@@ -4,6 +4,7 @@ import logging
 
 # Pillow for Image processing.
 from PIL import Image, ImageDraw, ImageFont
+from PIL.PngImagePlugin import PngInfo
 
 import random
 
@@ -106,7 +107,10 @@ class Thumbnail:
 def make_thumbnail(address, slot, output_path, old=False):
   thumb = Thumbnail(address, slot, old=old)
 
-  thumb.image().save(output_path)
+  metadata = PngInfo()
+  metadata.add_text("WitnessThumbnailsTool", "WitnessThumbnailsTool")
+
+  thumb.image().save(output_path, pnginfo=metadata)
 
 
 if __name__ == '__main__':
