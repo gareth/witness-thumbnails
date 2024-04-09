@@ -113,7 +113,14 @@ class Thumbnail:
         return outputs
 
 
-def make_thumbnail(address: str, slot: str, output_path: str, old: bool = False) -> None:
+def make_thumbnail(
+    address: str, slot: str, output_path: str, old: bool = False, check_already_exists: bool = True
+) -> None:
+    if check_already_exists and os.path.isfile(output_path):
+        im = Image.open(output_path)
+        if "WitnessThumbnailsTool" in im.info:
+            return
+
     thumb = Thumbnail(address, slot, old=old)
 
     metadata = PngInfo()
