@@ -2,6 +2,7 @@ import logging
 import os.path
 import random
 import sys
+from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
 # Pillow for Image processing.
@@ -38,30 +39,21 @@ def fontbox(text: str, size: int) -> Tuple[str, FreeTypeFont, Tuple[int, int, in
     return text, font, box
 
 
+@dataclass
 class Thumbnail:
-    def __init__(
-        self,
-        address: str,
-        slot: str,
-        seed: Optional[str] = None,
-        rows: int = 24,
-        cols: int = 3,
-        width: int = 320,
-        height: int = 180,
-        old: bool = False,
-    ) -> None:
-        self.address = address
-        self.slot = slot
-        self.seed = seed
-        self.width = width
-        self.height = height
-        self.rows = rows
-        self.cols = cols
-        self.old = old
+    address: str
+    slot: str
+    seed: Optional[str] = None
+    rows: int = 24
+    cols: int = 3
+    width: int = 320
+    height: int = 180
+    old: bool = False
 
-        attributes = Attributes(seed or f"{address}|{slot}", self.rows, self.cols)
+    def __post_init__(self) -> None:
+        attributes = Attributes(self.seed or f"{self.address}|{self.slot}", self.rows, self.cols)
 
-        if old:
+        if self.old:
             self.background = (110, 110, 110)
         else:
             self.background = attributes.background
