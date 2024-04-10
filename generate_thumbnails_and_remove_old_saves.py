@@ -196,13 +196,18 @@ def identify_saves(save_game_directory: str) -> Dict[Tuple[Optional[str], Option
 
 
 if __name__ == "__main__":
-    appdata = os.getenv("APPDATA")
-    if appdata is None:
-        raise RuntimeError("Couldn't find appdata directory. Is this not being run on Windows?")
+    try:
+        appdata = os.getenv("APPDATA")
+        if appdata is None:
+            raise RuntimeError("Couldn't find appdata directory. Is this not being run on Windows?")
 
-    appdata_witness = os.path.normpath(os.path.join(appdata, "The Witness"))
-    if not os.path.isdir(appdata_witness):
-        raise RuntimeError('Couldn\'t find "The Witness" directory in Appdata.')
+        appdata_witness = os.path.normpath(os.path.join(appdata, "The Witness"))
+        if not os.path.isdir(appdata_witness):
+            raise RuntimeError('Couldn\'t find "The Witness" directory in Appdata.')
 
-    remove_old_saves(appdata_witness)
-    generate_thumbnails(appdata_witness)
+        remove_old_saves(appdata_witness)
+        generate_thumbnails(appdata_witness)
+    except Exception as e:
+        print(e.with_traceback(None))
+
+    os.system("pause")

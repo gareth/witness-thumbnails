@@ -28,7 +28,7 @@ if os.path.isfile("fonts/Karmina Bold.otf"):
 else:
     logging.error(
         'Couldn\'t find font "Karmina Bold.otf". Please download this font and put it in the "fonts" subdirectory.'
-        ' Falling back to OpenSans.'
+        " Falling back to OpenSans."
     )
 
 
@@ -136,10 +136,15 @@ def make_thumbnail(
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 2:
-        address, slot = sys.argv[1:3]
-    else:
-        port = random.randrange(10000, 65535)
-        address, slot = (f"archipelago.gg:{port}", "Player")
+    try:
+        if len(sys.argv) > 2:
+            address, slot = sys.argv[1:3]
+        else:
+            port = random.randrange(10000, 65535)
+            address, slot = (f"archipelago.gg:{port}", "Player")
 
-    make_thumbnail(address, slot, f"output/{address}-{slot}.png")
+        make_thumbnail(address, slot, f"output/{address}-{slot}.png")
+    except Exception as e:
+        print(e.with_traceback(None))
+
+    os.system("pause")
