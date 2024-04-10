@@ -6,8 +6,10 @@ from datetime import datetime, timedelta
 from functools import lru_cache
 from typing import BinaryIO, Dict, List, Optional, Tuple
 
+from send2trash import send2trash
 from tqdm import tqdm
 
+import module_update  # noqa: F401
 from image import make_thumbnail
 
 ADDRESS_PANELS = [
@@ -59,9 +61,12 @@ PASSWORD_PANELS = [
     0x17CBC,
 ]
 
-REMOVE_REDUNDANTS_OLDER_THAN = timedelta(days=10)
-REMOVE_AP_OLDER_THAN = timedelta(days=365 * 2 / 3)
-REMOVE_REGARDLESS_OLDER_THAN = timedelta(days=365)
+REMOVE_REDUNDANTS_OLDER_THAN: Optional[timedelta] = timedelta(days=10)
+REMOVE_AP_OLDER_THAN: Optional[timedelta] = timedelta(days=365 * 2 / 3)
+REMOVE_REGARDLESS_OLDER_THAN: Optional[timedelta] = None
+
+# Use this to also remove old non-AP save games:
+# REMOVE_REGARDLESS_OLDER_THAN: Optional[timedelta] = timedelta(days=365)
 
 
 def get_string_from_panels(fh: BinaryIO, panel_set: List[int]) -> str:
@@ -134,16 +139,17 @@ def get_time(save_game: str) -> datetime:
 
 def remove_witness_save_game(save_game: str) -> None:
     if os.path.isfile(save_game):
-        os.remove(save_game)
+        send2trash(save_game)
     if os.path.isfile(save_game[:-17] + ".png"):
-        os.remove(save_game[:-17] + ".png")
+        send2trash(save_game[:-17] + ".png")
 
 
 def remove_old_saves(save_game_directory: str) -> None:
     address_slot_to_save_games = identify_saves(save_game_directory)
 
     for save_game in address_slot_to_save_games[(None, None)]:
-        if datetime.now() - get_time(save_game) > REMOVE_REGARDLESS_OLDER_THAN:
+        if REMOVE_REGARDLESS_OLDER_THAN and datetime.now() - get_time(save_game) > REMOVE_REGARDLESS_OLDER_THAN:
+            print(f"Removing save file older than {REMOVE_REGARDLESS_OLDER_THAN}: f{save_game}")
             remove_witness_save_game(save_game)
 
     address_slot_to_save_games = {
@@ -153,11 +159,14 @@ def remove_old_saves(save_game_directory: str) -> None:
     }
 
     for address, save_games in address_slot_to_save_games.items():
-        if datetime.now() - get_time(save_games[0]) > REMOVE_AP_OLDER_THAN:
+        if REMOVE_AP_OLDER_THAN and datetime.now() - get_time(save_games[0]) > REMOVE_AP_OLDER_THAN:
             print(f"Removing AP save file older than {REMOVE_AP_OLDER_THAN}: f{save_games[0]}")
             remove_witness_save_game(save_games[0])
         for older_save_game in save_games[1:]:
-            if datetime.now() - get_time(older_save_game) > REMOVE_REDUNDANTS_OLDER_THAN:
+            if (
+                REMOVE_REDUNDANTS_OLDER_THAN
+                and datetime.now() - get_time(older_save_game) > REMOVE_REDUNDANTS_OLDER_THAN
+            ):
                 print(f"Removing redundant save file older than {REMOVE_REDUNDANTS_OLDER_THAN}: f{older_save_game}")
                 remove_witness_save_game(older_save_game)
 

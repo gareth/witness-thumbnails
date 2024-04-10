@@ -10,6 +10,8 @@ from PIL import Image, ImageDraw, ImageFont
 from PIL.ImageFont import FreeTypeFont
 from PIL.PngImagePlugin import PngInfo
 
+import module_update  # noqa: F401
+
 AP_COLORS = [
     (201, 118, 130),  # AP red
     (117, 194, 117),  # AP green
