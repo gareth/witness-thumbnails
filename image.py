@@ -1,9 +1,8 @@
-import module_update  # noqa: F401,I001
-
 import logging
 import os.path
 import random
 import sys
+import traceback
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
@@ -11,6 +10,8 @@ from typing import List, Optional, Tuple
 from PIL import Image, ImageDraw, ImageFont
 from PIL.ImageFont import FreeTypeFont
 from PIL.PngImagePlugin import PngInfo
+
+import module_update  # noqa: F401
 
 AP_COLORS = [
     (201, 118, 130),  # AP red
@@ -146,7 +147,7 @@ if __name__ == "__main__":
             address, slot = (f"archipelago.gg:{port}", "Player")
 
         make_thumbnail(address, slot, f"output/{address}-{slot}.png")
-    except Exception as e:
-        print(e.with_traceback(None))
+    except Exception:
+        print(traceback.format_exc())
 
     os.system("pause")

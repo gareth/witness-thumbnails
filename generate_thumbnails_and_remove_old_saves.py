@@ -1,8 +1,7 @@
-import module_update  # noqa: F401,I001
-
 import glob
 import mmap
 import os
+import traceback
 from collections import defaultdict
 from datetime import datetime, timedelta
 from functools import lru_cache
@@ -11,6 +10,7 @@ from typing import BinaryIO, Dict, List, Optional, Tuple
 from send2trash import send2trash
 from tqdm import tqdm
 
+import module_update  # noqa: F401
 from image import make_thumbnail
 
 ADDRESS_PANELS = [
@@ -209,7 +209,7 @@ if __name__ == "__main__":
 
         remove_old_saves(appdata_witness)
         generate_thumbnails(appdata_witness)
-    except Exception as e:
-        print(e.with_traceback(None))
+    except Exception:
+        print(traceback.format_exc())
 
     os.system("pause")

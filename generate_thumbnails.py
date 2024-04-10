@@ -1,6 +1,7 @@
 import module_update  # noqa: F401,I001
 
 import os
+import traceback
 
 from generate_thumbnails_and_remove_old_saves import generate_thumbnails
 
@@ -15,7 +16,7 @@ if __name__ == "__main__":
             raise RuntimeError('Couldn\'t find "The Witness" directory in Appdata.')
 
         generate_thumbnails(appdata_witness)
-    except Exception as e:
-        print(e.with_traceback(None))
+    except Exception:
+        print(traceback.format_exc())
 
     os.system("pause")
