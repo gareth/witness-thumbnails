@@ -1,6 +1,7 @@
+import module_update  # noqa: F401,I001
+
 import os
 
-import module_update  # noqa: F401
 from generate_thumbnails_and_remove_old_saves import generate_thumbnails
 
 if __name__ == "__main__":

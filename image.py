@@ -1,3 +1,5 @@
+import module_update  # noqa: F401,I001
+
 import logging
 import os.path
 import random
@@ -9,8 +11,6 @@ from typing import List, Optional, Tuple
 from PIL import Image, ImageDraw, ImageFont
 from PIL.ImageFont import FreeTypeFont
 from PIL.PngImagePlugin import PngInfo
-
-import module_update  # noqa: F401
 
 AP_COLORS = [
     (201, 118, 130),  # AP red
