@@ -9,7 +9,6 @@ from typing import BinaryIO, Dict, List, Optional, Tuple
 from send2trash import send2trash
 from tqdm import tqdm
 
-import module_update  # noqa: F401
 from image import make_thumbnail
 
 ADDRESS_PANELS = [

@@ -10,8 +10,6 @@ from PIL import Image, ImageDraw, ImageFont
 from PIL.ImageFont import FreeTypeFont
 from PIL.PngImagePlugin import PngInfo
 
-import module_update  # noqa: F401
-
 AP_COLORS = [
     (201, 118, 130),  # AP red
     (117, 194, 117),  # AP green
@@ -21,11 +19,17 @@ AP_COLORS = [
     (238, 227, 145),  # AP yellow
 ]
 
-if not os.path.isfile("fonts/Karmina Bold.otf"):
+font_to_use = "fonts/OpenSans-SemiBold.ttf"
+font_sizes = [22, 72, 22]
+
+if os.path.isfile("fonts/Karmina Bold.otf"):
+    font_to_use = "fonts/Karmina Bold.otf"
+    font_sizes = [25, 80, 25]
+else:
     logging.error(
         'Couldn\'t find font "Karmina Bold.otf". Please download this font and put it in the "fonts" subdirectory.'
+        ' Falling back to OpenSans.'
     )
-    exit(-1)
 
 
 class Attributes:
@@ -36,7 +40,7 @@ class Attributes:
 
 
 def fontbox(text: str, size: int) -> Tuple[str, FreeTypeFont, Tuple[int, int, int, int]]:
-    font = ImageFont.truetype("fonts/Karmina Bold.otf", size=size)
+    font = ImageFont.truetype(font_to_use, size=size)
     box = font.getbbox(text)
     return text, font, box
 
@@ -74,7 +78,7 @@ class Thumbnail:
         draw = ImageDraw.Draw(image)
         draw.fontmode = "l"  # Antialiased
 
-        rows = self.layout([server_text, f":{port_text}", slot_text], [25, 80, 25], 5)
+        rows = self.layout([server_text, f":{port_text}", slot_text], font_sizes, 5)
 
         layout_height = rows[-1][-1]
 
@@ -85,7 +89,7 @@ class Thumbnail:
             draw.text((x + padding_left, y + padding_top), text, fill=ink, font=font)
 
         if self.old:
-            text, font, bbox = fontbox("(old)", 25)
+            text, font, bbox = fontbox("(old)", font_sizes[0])
             _, _, width, height = bbox
             draw.text((self.width - width - 5, self.height - height - 5), text, fill=ink, font=font)
 
