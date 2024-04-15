@@ -177,7 +177,11 @@ def generate_thumbnails(save_game_directory: str) -> None:
     address_slot_to_save_games = identify_saves(save_game_directory)
 
     address_slot_to_save_games = {
-        key: sorted(save_games, key=lambda k: get_time(k), reverse=True)
+        key: [
+            save_game
+            for save_game in sorted(save_games, key=lambda k: get_time(k), reverse=True)
+            if os.path.isfile(save_game)
+        ]
         for key, save_games in address_slot_to_save_games.items()
         if key != (None, None)
     }
