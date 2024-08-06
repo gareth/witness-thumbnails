@@ -150,7 +150,7 @@ def remove_old_saves(save_game_directory: str) -> None:
     address_slot_to_save_games = identify_saves(save_game_directory)
 
     for save_game in address_slot_to_save_games[(None, None)]:
-        if REMOVE_REGARDLESS_OLDER_THAN and datetime.now() - get_time(save_game) > REMOVE_REGARDLESS_OLDER_THAN:
+        if REMOVE_REGARDLESS_OLDER_THAN and datetime.now() - get_time(save_game) >= REMOVE_REGARDLESS_OLDER_THAN:
             print(f"Removing save file older than {REMOVE_REGARDLESS_OLDER_THAN}: f{save_game}")
             remove_witness_save_game(save_game)
 
@@ -161,13 +161,13 @@ def remove_old_saves(save_game_directory: str) -> None:
     }
 
     for address, save_games in address_slot_to_save_games.items():
-        if REMOVE_AP_OLDER_THAN and datetime.now() - get_time(save_games[0]) > REMOVE_AP_OLDER_THAN:
+        if REMOVE_AP_OLDER_THAN and datetime.now() - get_time(save_games[0]) >= REMOVE_AP_OLDER_THAN:
             print(f"Removing AP save file older than {REMOVE_AP_OLDER_THAN}: f{save_games[0]}")
             remove_witness_save_game(save_games[0])
         for older_save_game in save_games[1:]:
             if (
                 REMOVE_REDUNDANTS_OLDER_THAN
-                and datetime.now() - get_time(older_save_game) > REMOVE_REDUNDANTS_OLDER_THAN
+                and datetime.now() - get_time(older_save_game) >= REMOVE_REDUNDANTS_OLDER_THAN
             ):
                 print(f"Removing redundant save file older than {REMOVE_REDUNDANTS_OLDER_THAN}: f{older_save_game}")
                 remove_witness_save_game(older_save_game)
