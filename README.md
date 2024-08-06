@@ -6,6 +6,5 @@ A Python script to add thumbnails to your Archipelago Witness savegames.
 
 ## Usage
 
-1. The script needs the Karmina Bold font to be available (in `fonts/Karmina Bold.otf`) but this is not a freely licensed font. Alternatives can be provided.
-2. Have Python installed
-3. Double click or otherwise run either "generate_thumbnails.py" or "generate_thumbnails_and_remove_old_saves.py"
+1. Have Python installed
+2. Double click or otherwise run either "generate_thumbnails.py" or "generate_thumbnails_and_remove_old_saves.py"
