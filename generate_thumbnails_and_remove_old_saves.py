@@ -187,6 +187,9 @@ def generate_thumbnails(save_game_directory: str) -> None:
     }
 
     for address, save_games in tqdm(address_slot_to_save_games.items(), "Generating image files"):
+        if not save_games:
+            continue
+
         make_thumbnail(address[0], address[1], save_games[0][:-17] + ".png")
         for older_save_game in save_games[1:]:
             make_thumbnail(address[0], address[1], older_save_game[:-17] + ".png", True)
