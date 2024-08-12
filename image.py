@@ -7,6 +7,7 @@ import sys
 import traceback
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
+from pathlib import Path
 
 # Pillow for Image processing.
 from PIL import Image, ImageDraw, ImageFont
@@ -22,11 +23,12 @@ AP_COLORS = [
     (238, 227, 145),  # AP yellow
 ]
 
-font_to_use = "fonts/OpenSans-SemiBold.ttf"
+font_to_use = Path(__file__).parent / "fonts" / "OpenSans-SemiBold.ttf"
 font_sizes = [22, 72, 22]
+better_font = Path(__file__).parent / "fonts" / "Karmina Bold.ttf"
 
-if os.path.isfile("fonts/Karmina Bold.otf"):
-    font_to_use = "fonts/Karmina Bold.otf"
+if os.path.isfile(better_font):
+    font_to_use = better_font
     font_sizes = [25, 80, 25]
 else:
     logging.error(
