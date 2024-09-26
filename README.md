@@ -1,13 +1,10 @@
 # Witness thumbnails
 
-A quick Python script to generate Witness-compatible savefile-sized images.
+A Python script to add thumbnails to your Archipelago Witness savegames.
 
-Images are randomly generated but seeded by their content, which means their generation is consistent
-
-The script needs the Karmina Bold font to be available (in `fonts/Karmina Bold.otf`) but this is not a freely licensed font. Alternatives can be provided.
+![image](https://github.com/gareth/witness-thumbnails/assets/57900059/4b127a2c-3a43-406c-b93d-c3f5fb93e87f)
 
 ## Usage
 
-```sh
-$ python image.py archipelago.example:12345 PlayerName
-```
+1. Have Python installed
+2. Double click or otherwise run either "generate_thumbnails.py" or "generate_thumbnails_and_remove_old_saves.py"
