@@ -132,7 +132,10 @@ def get_time(save_game: str) -> datetime:
         time = basename[(basename.find("time_") + 5) : -17]
         datetime_string = date + " " + time
         format_string = "%Y.%m.%d %H.%M.%S"
-        datetime_obj = datetime.strptime(datetime_string, format_string)
+        try:
+            datetime_obj = datetime.strptime(datetime_string, format_string)
+        except ValueError:
+            datetime_obj = datetime.fromtimestamp(os.path.getmtime(save_game))
     else:
         datetime_obj = datetime.fromtimestamp(os.path.getmtime(save_game))
 
